@@ -56,6 +56,9 @@ pub struct Interpreter {
     is_return: bool,
     /// realm holds both the global object and the environment
     pub realm: Realm,
+
+    /// This is for generating an unique internal `Symbol` hash.
+    symbol_count: u32,
 }
 
 impl Interpreter {
@@ -64,6 +67,7 @@ impl Interpreter {
         Self {
             realm,
             is_return: false,
+            symbol_count: 0,
         }
     }
 
@@ -75,6 +79,12 @@ impl Interpreter {
     /// Retrieves the `Realm` of this executor as a mutable reference.
     pub(crate) fn realm_mut(&mut self) -> &mut Realm {
         &mut self.realm
+    }
+
+    pub(crate) fn generate_hash(&mut self) -> u32 {
+        let hash = self.symbol_count;
+        self.symbol_count += 1;
+        hash
     }
 
     /// Utility to create a function Value for Function Declarations, Arrow Functions or Function Expressions
