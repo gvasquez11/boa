@@ -33,6 +33,12 @@ use std::{
 pub(crate) struct Array;
 
 impl Array {
+    /// The name of the object.
+    pub(crate) const NAME: &'static str = "Array";
+
+    /// The amount of arguments this function object takes.
+    pub(crate) const LENGTH: i32 = 1;
+
     /// Creates a new `Array` instance.
     pub(crate) fn new_array(interpreter: &Interpreter) -> ResultValue {
         let array = Value::new_object(Some(
@@ -1031,7 +1037,14 @@ impl Array {
         make_builtin_fn(Self::slice, "slice", &prototype, 2);
         make_builtin_fn(Self::some, "some", &prototype, 2);
 
-        let array = make_constructor_fn("Array", 1, Self::make_array, global, prototype, true);
+        let array = make_constructor_fn(
+            Self::NAME,
+            Self::LENGTH,
+            Self::make_array,
+            global,
+            prototype,
+            true,
+        );
 
         // Static Methods
         make_builtin_fn(Self::is_array, "isArray", &array, 1);
@@ -1042,8 +1055,8 @@ impl Array {
     /// Initialise the `Array` object on the global object.
     #[inline]
     pub(crate) fn init(global: &Value) -> (&str, Value) {
-        let _timer = BoaProfiler::global().start_event("array", "init");
+        let _timer = BoaProfiler::global().start_event(Self::NAME, "init");
 
-        ("Array", Self::create(global))
+        (Self::NAME, Self::create(global))
     }
 }
