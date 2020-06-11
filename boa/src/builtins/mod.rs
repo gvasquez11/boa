@@ -34,6 +34,7 @@ pub(crate) use self::{
 #[inline]
 pub fn init(global: &Value) {
     let globals = vec![
+        // The `Function` global must be initialized before other types.
         function::init(global),
         Array::init(global),
         BigInt::init(global),
@@ -47,6 +48,7 @@ pub fn init(global: &Value) {
         String::init(global),
         Symbol::init(global),
         console::init(global),
+        // Global error types.
         Error::init(global),
         RangeError::init(global),
         TypeError::init(global),
